@@ -1,0 +1,17 @@
+version: "2.4"
+services:
+  freeswitch:
+    build:
+      context: .
+      network: host
+    image: freeswitch:latest
+    container_name: freeswitch
+    network_mode: host
+    privileged: true
+    cap_add:
+      - ALL
+    ulimits:
+      nofile:
+        soft: 64000
+        hard: 64000
+    restart: unless-stopped
