@@ -47,8 +47,8 @@ RUN ./bootstrap.sh && ./configure && make && make install
 
 FROM base AS final
 
-ENV LD_LIBRARY_PATH=/usr/local/lib
-#ENV PATH=/usr/local/freeswitch/bin
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV PATH="${PATH}:/usr/local/freeswitch/bin"
 
 COPY --from=build /usr/local/ /usr/local/
 
@@ -72,8 +72,7 @@ VOLUME ["/etc/freeswitch"]
 VOLUME ["/tmp"]
 
 # Healthcheck to make sure the service is running
-SHELL       ["/bin/bash"]
 HEALTHCHECK --interval=15s --timeout=5s \
-    CMD  fs_cli -x status | grep -q ^UP || exit 
+    CMD fs_cli -x status | grep -q ^UP || exit 
 
-CMD freeswitch -c
+ENTRYPOINT ["freeswitch", "-c"]
